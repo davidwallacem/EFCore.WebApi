@@ -16,10 +16,6 @@ namespace EFCore.Infra.Data.Configuration
             new Microsoft.Extensions.Logging.Debug.DebugLoggerProvider()
         });
 
-        public HeroiContext()
-        {
-        }
-
         /// <summary>
         /// Construtor estruturado para receber "Configuration.GetConnectionString" no Startup
         /// </summary>
@@ -33,25 +29,14 @@ namespace EFCore.Infra.Data.Configuration
         public DbSet<IdentidadeSecreta> IdentidadeSecreta { get; set; }
 
         /// <summary>
-        /// Comentar depois quando criar injeção de dependência
+        /// Adicionando o Logger no Builder para retonar os comando enviado para o Banco de Dados.
         /// </summary>
         /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=HeroiApp;Data Source=localhost\\SQLEXPRESS");
             optionsBuilder.UseLoggerFactory(_myLoggerFactory);
             base.OnConfiguring(optionsBuilder);
         }
-
-        ///// <summary>
-        ///// Adicionando o Logger no Builder para retonar os comando enviado para o Banco de Dados.
-        ///// </summary>
-        ///// <param name="optionsBuilder"></param>
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseLoggerFactory(_myLoggerFactory);
-        //    base.OnConfiguring(optionsBuilder);
-        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

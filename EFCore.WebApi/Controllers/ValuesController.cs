@@ -2,6 +2,7 @@
 using EFCore.Infra.Data.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,29 +12,69 @@ namespace EFCore.WebApi.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        public ValuesController()
+        public readonly HeroiContext _context;
+        public ValuesController(HeroiContext context)
         {
-
+            _context = context;
         }
+
         // GET: api/<ValuesController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("filtro/{nome}")]
+        public IActionResult GetFiltro(string nome)
         {
-            return new string[] { "value1", "value2" };
+            //Lambda
+            var listHeroi = _context.Herois
+                .Where(h => h.Nome.Contains(nome)).ToList();
+
+            //LINQ
+            //var listHeroi = (from heroi in _context.Herois
+            //                 where heroi.Nome.Contains(nome)
+            //                 select heroi).ToList();
+
+            return Ok(listHeroi);
         }
 
         // GET api/<ValuesController>/5
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        [HttpGet("inserir/{nameHero}")]
+        public IActionResult GetInserir(string nameHero)
         {
-            var heroi = new Heroi() { Nome = "Thor" };
-            using (var context = new HeroiContext()) 
-            {
-                context.Herois.Add(heroi);
-                context.SaveChanges();
-            }
+            var heroi = new Heroi() { Nome = nameHero };
+            _context.Herois.Add(heroi);
+            _context.SaveChanges();
+
             return Ok();
         }
+
+        // GET api/<ValuesController>/5
+        [HttpGet("atualizar/{nameHero}")]
+        public IActionResult GetAtualizar(int Id)
+        {
+            var heroi = _context.Herois
+                .Where(h => h.Id == Id)
+                .FirstOrDefault();
+
+            heroi.Nome = "Homem Aranha";
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
+        // POST api/<ValuesController>
+        [HttpGet("AddRange")]
+        public IActionResult GetAddRange()
+        {
+            _context.AddRange(
+                new Heroi { Nome = "Capitão América" },
+                new Heroi { Nome = "Doutor Estranho" },
+                new Heroi { Nome = "Pantera Negra" },
+                new Heroi { Nome = "Hulk" },
+                new Heroi { Nome = "Gavião Arqueiro" },
+                new Heroi { Nome = "Capitã Marvel" }
+                );
+            _context.SaveChanges();
+            return Ok();
+        }
+
 
         // POST api/<ValuesController>
         [HttpPost]
@@ -50,10 +91,17 @@ namespace EFCore.WebApi.Controllers
         }
 
         // DELETE api/<ValuesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("deletar/{Id}")]
+        public void Delete(int Id)
         {
-            // Method intentionally left empty.
+            //Lambda
+            var heroi = _context.Herois
+                .Where(h => h.Id == Id)
+                .Single();
+
+            _context.Herois.Remove(heroi);
+            _context.SaveChanges();
+
         }
     }
 }
