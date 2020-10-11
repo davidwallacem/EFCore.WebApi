@@ -5,12 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace EFCore.WebApi.Migrations
+namespace EFCore.Infra.Migrations
 {
     [DbContext(typeof(HeroiContext))]
-    [Migration("20201008012236_HeroiBatalha_IdentidadeSecreta")]
-    partial class HeroiBatalha_IdentidadeSecreta
+    [Migration("20201011042437_HeroiMigration")]
+    partial class HeroiMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,7 +21,7 @@ namespace EFCore.WebApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("EFCore.WebApi.Models.Arma", b =>
+            modelBuilder.Entity("EFCore.Domain.Arma", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -40,7 +41,7 @@ namespace EFCore.WebApi.Migrations
                     b.ToTable("Armas");
                 });
 
-            modelBuilder.Entity("EFCore.WebApi.Models.Batalha", b =>
+            modelBuilder.Entity("EFCore.Domain.Batalha", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -64,7 +65,7 @@ namespace EFCore.WebApi.Migrations
                     b.ToTable("Batalhas");
                 });
 
-            modelBuilder.Entity("EFCore.WebApi.Models.Heroi", b =>
+            modelBuilder.Entity("EFCore.Domain.Heroi", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -79,7 +80,7 @@ namespace EFCore.WebApi.Migrations
                     b.ToTable("Herois");
                 });
 
-            modelBuilder.Entity("EFCore.WebApi.Models.HeroiBatalha", b =>
+            modelBuilder.Entity("EFCore.Domain.HeroiBatalha", b =>
                 {
                     b.Property<int>("BatalhaId")
                         .HasColumnType("int");
@@ -94,7 +95,7 @@ namespace EFCore.WebApi.Migrations
                     b.ToTable("HeroiBatalha");
                 });
 
-            modelBuilder.Entity("EFCore.WebApi.Models.IdentidadeSecreta", b =>
+            modelBuilder.Entity("EFCore.Domain.IdentidadeSecreta", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -115,35 +116,35 @@ namespace EFCore.WebApi.Migrations
                     b.ToTable("IdentidadeSecreta");
                 });
 
-            modelBuilder.Entity("EFCore.WebApi.Models.Arma", b =>
+            modelBuilder.Entity("EFCore.Domain.Arma", b =>
                 {
-                    b.HasOne("EFCore.WebApi.Models.Heroi", "Heroi")
+                    b.HasOne("EFCore.Domain.Heroi", "Heroi")
                         .WithMany("Armas")
                         .HasForeignKey("HeroiId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EFCore.WebApi.Models.HeroiBatalha", b =>
+            modelBuilder.Entity("EFCore.Domain.HeroiBatalha", b =>
                 {
-                    b.HasOne("EFCore.WebApi.Models.Batalha", "Batalha")
+                    b.HasOne("EFCore.Domain.Batalha", "Batalha")
                         .WithMany("HeroisBatalhas")
                         .HasForeignKey("BatalhaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EFCore.WebApi.Models.Heroi", "Heroi")
+                    b.HasOne("EFCore.Domain.Heroi", "Heroi")
                         .WithMany("HeroisBatalhas")
                         .HasForeignKey("HeroiId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EFCore.WebApi.Models.IdentidadeSecreta", b =>
+            modelBuilder.Entity("EFCore.Domain.IdentidadeSecreta", b =>
                 {
-                    b.HasOne("EFCore.WebApi.Models.Heroi", "Heroi")
+                    b.HasOne("EFCore.Domain.Heroi", "Heroi")
                         .WithOne("IdentidadeSecreta")
-                        .HasForeignKey("EFCore.WebApi.Models.IdentidadeSecreta", "HeroiId")
+                        .HasForeignKey("EFCore.Domain.IdentidadeSecreta", "HeroiId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
