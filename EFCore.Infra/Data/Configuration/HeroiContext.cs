@@ -1,7 +1,7 @@
-﻿using EFCore.WebApi.Models;
+﻿using EFCore.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace EFCore.WebApi.Data
+namespace EFCore.Infra.Data.Configuration
 {
     public class HeroiContext : DbContext
     {
