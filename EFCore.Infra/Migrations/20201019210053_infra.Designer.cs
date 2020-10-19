@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EFCore.Infra.Migrations
 {
     [DbContext(typeof(HeroiContext))]
-    [Migration("20201011042437_HeroiMigration")]
-    partial class HeroiMigration
+    [Migration("20201019210053_infra")]
+    partial class infra
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

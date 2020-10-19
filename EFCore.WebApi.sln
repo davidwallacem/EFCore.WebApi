@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCore.WebApi", "EFCore.WebApi\EFCore.WebApi.csproj", "{3519E8EB-95A4-4A50-B419-0EDF1D487638}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCore.Domain", "EFCore.Domain\EFCore.Domain.csproj", "{8DE36C3B-0C04-4018-9470-F273694C327C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCore.Domain", "EFCore.Domain\EFCore.Domain.csproj", "{8DE36C3B-0C04-4018-9470-F273694C327C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCore.Infra", "EFCore.Infra\EFCore.Infra.csproj", "{91ABDE30-EFD0-4007-A157-9931AC0F342A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCore.Infra", "EFCore.Infra\EFCore.Infra.csproj", "{91ABDE30-EFD0-4007-A157-9931AC0F342A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

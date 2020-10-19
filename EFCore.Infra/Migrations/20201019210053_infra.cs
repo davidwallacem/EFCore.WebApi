@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EFCore.Infra.Migrations
 {
-    public partial class HeroiMigration : Migration
+    public partial class infra : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
