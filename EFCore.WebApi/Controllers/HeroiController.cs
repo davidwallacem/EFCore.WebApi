@@ -1,10 +1,10 @@
-﻿using EFCore.Domain;
-using EFCore.Infra.Data.Configuration;
+﻿using EFCore.Api.Interface;
+using EFCore.Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,19 +14,28 @@ namespace EFCore.WebApi.Controllers
     [ApiController]
     public class HeroiController : ControllerBase
     {
-        public readonly HeroiContext _context;
-        private readonly ILogger<ValuesController> _logger;
-        public HeroiController(HeroiContext context, ILogger<ValuesController> logger)
+        private readonly IAppHeroi _heroi;
+        private readonly ILogger<HeroiController> _logger;
+        public HeroiController(IAppHeroi heroi, ILogger<HeroiController> logger)
         {
-            _context = context;
+            _heroi = heroi;
             _logger = logger;
         }
 
         // GET api/<HeroiController>/5
         [HttpGet("Get/{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get(int Id)
         {
-            return Ok();
+            try
+            {
+                var herois = _heroi.GetHeroisById(Id);
+                return Ok(herois);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest($"Erro: {ex}");
+            }
         }
 
         // GET api/<HeroiController>/GetHeroi
@@ -35,7 +44,9 @@ namespace EFCore.WebApi.Controllers
         {
             try
             {
-                return Ok(new Heroi());
+                var herois = _heroi.GetAllHerois();
+                _logger.LogInformation("Teste");
+                return Ok(herois);
             }
             catch (Exception ex)
             {
@@ -54,19 +65,20 @@ namespace EFCore.WebApi.Controllers
         /// <response code="500">Ocorreu um erro ao cadastrar o Heroi.</response>
         // POST api/<HeroiController>/PostHeroi/5
         [HttpPost("PostHeroi")]
-        public IActionResult PostHeroi(Heroi model)
+        public async Task<IActionResult> PostHeroi(Heroi model)
         {
             try
             {
-                _context.Herois.Add(model);
-                _context.SaveChanges();
-                return Ok("BAZINGA");
+                if (await _heroi.SalvarHeroi(model))
+                {
+                    return Ok("BAZINGA!!!");
+                }
             }
             catch (Exception ex)
             {
-
                 return BadRequest($"Erro: {ex}");
             }
+            return BadRequest("Não Salvou");
         }
 
         /// <summary>
@@ -84,32 +96,53 @@ namespace EFCore.WebApi.Controllers
         /// <response code="500">Ocorreu um erro ao atualizar o Heroi.</response>
         // PUT api/<HeroiController>/PutHeroi/5
         [HttpPut("PutHeroi/{Id}")]
-        public IActionResult PutHeroi(int Id, Heroi model)
+        public async Task<IActionResult> PutHeroi(int Id, Heroi model)
         {
             try
             {
-                if (_context.Herois.AsNoTracking().FirstOrDefault(h => h.Id == Id) != null)
+                if (_heroi.ExistHeroi(Id))
                 {
-                    _context.Herois.Update(model);
-                    _context.SaveChanges();
-                    return Ok("BAZINGA!!!");
+                    if (await _heroi.AtualizarHeroi(model))
+                    {
+                        return Ok("BAZINGA!!!");
+                    }
                 }
                 else
                 {
-                    return Ok("Não encontrado!");
+                    return Ok("Não encontrado!!!");
                 }
             }
             catch (Exception ex)
             {
                 return BadRequest($"Erro: {ex}");
             }
+            return BadRequest("Não Salvou");
         }
 
         // DELETE api/<HeroiController>/5
-        [HttpDelete("{Id}")]
-        public void Delete(int Id)
+        [HttpDelete("Delete/{Id}")]
+        public async Task<IActionResult> Delete(int Id)
         {
-            // Method intentionally left empty.
+            try
+            {
+                var result = _heroi.GetHeroiById(Id);
+                if (result != null)
+                {
+                    if (await _heroi.DeletarHeroi(result))
+                    {
+                        return Ok("BAZINGA!!!");
+                    }
+                }
+                else
+                {
+                    return Ok("Não encontrado!!!");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro: {ex}");
+            }
+            return BadRequest("Não Deletado");
         }
     }
 }

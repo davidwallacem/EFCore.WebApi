@@ -1,11 +1,10 @@
 ﻿using EFCore.Domain;
-using EFCore.Infra.Data.Configuration;
+using EFCore.Infra.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,11 +14,11 @@ namespace EFCore.WebApi.Controllers
     [ApiController]
     public class BatalhaController : ControllerBase
     {
-        public readonly HeroiContext _context;
+        public readonly IRepositoryBatalha _batalha;
         private readonly ILogger<ValuesController> _logger;
-        public BatalhaController(HeroiContext context, ILogger<ValuesController> logger)
+        public BatalhaController(IRepositoryBatalha batalha, ILogger<ValuesController> logger)
         {
-            _context = context;
+            _batalha = batalha;
             _logger = logger;
         }
         // GET: api/<BatalhaController>
@@ -46,19 +45,23 @@ namespace EFCore.WebApi.Controllers
         /// <response code="500">Ocorreu um erro ao cadastrar o Heroi.</response>
         // POST api/<BatalhaController>
         [HttpPost("PostBatalha")]
-        public IActionResult PostBatalha(Batalha model)
+        public async Task<IActionResult> PostBatalha(Batalha model)
         {
             try
             {
-                _context.Batalhas.Add(model);
-                _context.SaveChanges();
-                return Ok("BAZINGA");
+                _batalha.Add(model);
+                if (await _batalha.SaveChangesAsync())
+                {
+                    return Ok("BAZINGA!!!");
+                }
             }
             catch (Exception ex)
             {
 
                 return BadRequest($"Erro: {ex}");
             }
+
+            return BadRequest("Não Salvou");
         }
 
         /// <summary>
@@ -72,15 +75,17 @@ namespace EFCore.WebApi.Controllers
         /// <response code="500">Ocorreu um erro ao cadastrar o Heroi.</response>
         // PUT api/<BatalhaController>/5
         [HttpPut("PutBatalha/{id}")]
-        public IActionResult PutBatalha(int Id, Batalha model)
+        public async Task<IActionResult> PutBatalha(int Id, Batalha model)
         {
             try
             {
-                if (_context.Batalhas.AsNoTracking().FirstOrDefault(h => h.Id == Id) != null)
+                if (await _batalha.TrackingAsync(h => h.Id == Id) != null)
                 {
-                    _context.Batalhas.Update(model);
-                    _context.SaveChanges();
-                    return Ok("BAZINGA!!!");
+                    _batalha.Update(model);
+                    if (await _batalha.SaveChangesAsync())
+                    {
+                        return Ok("BAZINGA!!!");
+                    }
                 }
                 else
                 {
@@ -91,6 +96,7 @@ namespace EFCore.WebApi.Controllers
             {
                 return BadRequest($"Erro: {ex}");
             }
+            return BadRequest("Não Salvou");
         }
 
         // DELETE api/<BatalhaController>/5
