@@ -18,6 +18,16 @@ namespace EFCore.WebApi
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                //Adiciona logging
+                //.ConfigureLogging((context, logging) =>
+                //{
+                //    logging.ClearProviders();
+                //    logging.AddConfiguration(context.Configuration.GetSection("Logging"));
+                //    logging.AddDebug();
+                //    logging.AddConsole();
+                //    // EventSource, Eventlog, TraceSource, AzureAppServicesFile, AzureAppServicesBlob, ApplicationInsights 
+                //})
+                ///////////////////////////////////////
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
