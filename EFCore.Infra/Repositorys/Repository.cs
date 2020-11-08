@@ -2,6 +2,7 @@
 using EFCore.Infra.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -22,37 +23,58 @@ namespace EFCore.Infra.Repositorys
 
         #region Métodos
 
-        public DbContext GetContext() => context;
+        public DbContext GetContext() 
+            => context;
 
-        public T Add(T entity) => Query.Add(entity).Entity;
+        public T Add(T entity) 
+            => Query.Add(entity).Entity;
 
-        public void Update(T entity) => context.Entry(entity).State = EntityState.Modified;
+        public void Update(T entity)
+            => context.Entry(entity).State = EntityState.Modified;
 
-        public T Delete(T entity) => Query.Remove(entity).Entity;
+        public T Remove(T entity) 
+            => Query.Remove(entity).Entity;
 
-        public virtual T FindById(int id) => Query.Find(id);
+        public T GetById(int id) 
+            => Query.Find(id);
 
-        public virtual T FindBy(Expression<Func<T, bool>> predicate) => Query.Find(predicate);
+        public T GetBy(Expression<Func<T, bool>> predicate) 
+            => Query.Find(predicate);
 
-        public virtual T Tracking(Expression<Func<T, bool>> predicate) => Query.AsNoTracking().FirstOrDefault(predicate);
+        public T GetAsNoTracking(Expression<Func<T, bool>> predicate) 
+            => Query.AsNoTracking().FirstOrDefault(predicate);
 
-        public virtual IQueryable<T> GetAll() => Query;
+        public IEnumerable<T> GetList()
+            => Query;
 
-        public virtual IQueryable<T> GetBy(Expression<Func<T, bool>> predicate) => Query.Where(predicate);
+        public IEnumerable<T> GetListBy(Expression<Func<T, bool>> predicate) 
+            => Query.Where(predicate);
 
-        public bool SaveChanges() => (context.SaveChanges()) > 0;
+        public bool SaveChanges() 
+            => (context.SaveChanges()) > 0;
 
         #endregion
 
         #region Métodos Asincronas
 
-        public async Task<T> FindAsyncById(int id) => await Query.FindAsync(id);
 
-        public async Task<T> FindAsyncBy(Expression<Func<T, bool>> predicate) => await Query.FindAsync(predicate);
+        public async Task<T> GetByIdAsync(int id) 
+            => await Query.FindAsync(id);
 
-        public virtual async Task<T> TrackingAsync(Expression<Func<T, bool>> predicate) => await Query.AsNoTracking().FirstOrDefaultAsync(predicate);
+        public async Task<T> GetByAsync(Expression<Func<T, bool>> predicate) 
+            => await Query.FindAsync(predicate);
 
-        public async Task<bool> SaveChangesAsync() => (await context.SaveChangesAsync()) > 0;
+        public async Task<T> GetAsNoTrackingAsync(Expression<Func<T, bool>> predicate) 
+            => await Query.AsNoTracking().FirstOrDefaultAsync(predicate);
+
+        public async Task<IEnumerable<T>> GetListAsync()
+            => await Query.AsNoTracking().ToListAsync();
+
+        public async Task<IEnumerable<T>> GetListByAsync(Expression<Func<T, bool>> predicate)
+            => await Query.Where(predicate).AsNoTracking().ToListAsync();
+
+        public async Task<bool> SaveChangesAsync() 
+            => (await context.SaveChangesAsync()) > 0;
         
         #endregion
 

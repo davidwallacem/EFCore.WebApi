@@ -1,5 +1,5 @@
 ﻿using EFCore.Domain;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EFCore.Api.Interface
@@ -11,9 +11,9 @@ namespace EFCore.Api.Interface
 
         Heroi GetHeroiById(int Id);
 
-        IQueryable GetAllHerois();
+        IEnumerable<Heroi> GetAllHerois();
 
-        IQueryable GetHeroisById(int Id);
+        //IQueryable GetHeroisById(int Id);
 
         Task<bool> SalvarHeroi(Heroi model);
 

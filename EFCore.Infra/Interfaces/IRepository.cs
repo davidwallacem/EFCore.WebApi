@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -13,12 +13,12 @@ namespace EFCore.Infra.Interfaces
         DbContext GetContext();
         T Add(T entity);
         void Update(T entity);
-        T Delete(T entity);
-        T FindById(int id);
-        T FindBy(Expression<Func<T, bool>> predicate);
-        T Tracking(Expression<Func<T, bool>> predicate);
-        IQueryable<T> GetAll();
-        IQueryable<T> GetBy(Expression<Func<T, bool>> predicate);
+        T Remove(T entity);
+        T GetById(int id);
+        T GetBy(Expression<Func<T, bool>> predicate);
+        T GetAsNoTracking(Expression<Func<T, bool>> predicate);
+        IEnumerable<T> GetList();
+        IEnumerable<T> GetListBy(Expression<Func<T, bool>> predicate);
         bool SaveChanges();
 
         #endregion
@@ -26,11 +26,15 @@ namespace EFCore.Infra.Interfaces
 
         #region Assinaturas dos Métodos Asincronas
 
-        Task<T> FindAsyncById(int id);
+        Task<T> GetByIdAsync(int id);
 
-        Task<T> FindAsyncBy(Expression<Func<T, bool>> predicate);
+        Task<T> GetByAsync(Expression<Func<T, bool>> predicate);
 
-        Task<T> TrackingAsync(Expression<Func<T, bool>> predicate);
+        Task<T> GetAsNoTrackingAsync(Expression<Func<T, bool>> predicate);
+
+        Task<IEnumerable<T>> GetListAsync();
+
+        Task<IEnumerable<T>> GetListByAsync(Expression<Func<T, bool>> predicate);
 
         Task<bool> SaveChangesAsync();
 

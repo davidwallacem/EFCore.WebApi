@@ -3,7 +3,6 @@ using EFCore.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -28,8 +27,9 @@ namespace EFCore.WebApi.Controllers
         {
             try
             {
-                var herois = _heroi.GetHeroisById(Id);
-                return Ok(herois);
+                //var herois = _heroi.GetHeroisById(Id);
+                //return Ok(herois);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -44,13 +44,14 @@ namespace EFCore.WebApi.Controllers
         {
             try
             {
+                _logger.LogInformation("Metodo GetHeroi - Inicio");
                 var herois = _heroi.GetAllHerois();
-                _logger.LogInformation("Teste");
+                _logger.LogInformation("Metodo GetHeroi - Fim");
                 return Ok(herois);
             }
             catch (Exception ex)
             {
-
+                _logger.LogError(ex, ex.Message);
                 return BadRequest($"Erro: {ex}");
             }
         }

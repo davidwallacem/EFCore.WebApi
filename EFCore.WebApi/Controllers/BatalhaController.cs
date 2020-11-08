@@ -14,12 +14,12 @@ namespace EFCore.WebApi.Controllers
     [ApiController]
     public class BatalhaController : ControllerBase
     {
-        public readonly IRepositoryBatalha _batalha;
-        private readonly ILogger<ValuesController> _logger;
-        public BatalhaController(IRepositoryBatalha batalha, ILogger<ValuesController> logger)
+        private readonly IRepositoryBatalha batalha;
+        private readonly ILogger<BatalhaController> logger;
+        public BatalhaController(IRepositoryBatalha batalha, ILogger<BatalhaController> logger)
         {
-            _batalha = batalha;
-            _logger = logger;
+            this.batalha = batalha;
+            this.logger = logger;
         }
         // GET: api/<BatalhaController>
         [HttpGet]
@@ -49,8 +49,8 @@ namespace EFCore.WebApi.Controllers
         {
             try
             {
-                _batalha.Add(model);
-                if (await _batalha.SaveChangesAsync())
+                batalha.Add(model);
+                if (await batalha.SaveChangesAsync())
                 {
                     return Ok("BAZINGA!!!");
                 }
@@ -79,10 +79,10 @@ namespace EFCore.WebApi.Controllers
         {
             try
             {
-                if (await _batalha.TrackingAsync(h => h.Id == Id) != null)
+                if (await batalha.GetAsNoTrackingAsync(h => h.Id == Id) != null)
                 {
-                    _batalha.Update(model);
-                    if (await _batalha.SaveChangesAsync())
+                    batalha.Update(model);
+                    if (await batalha.SaveChangesAsync())
                     {
                         return Ok("BAZINGA!!!");
                     }
