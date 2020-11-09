@@ -1,25 +1,24 @@
 ﻿using EFCore.Api.Interface;
 using EFCore.Domain;
 using EFCore.Infra.Interfaces;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace EFCore.Api.App
 {
-    public class AppBatalha : IAppBatalha
+    public class ServiceBatalha : IServiceBatalha
     {
         private readonly IRepositoryBatalha batalha;
-        public AppBatalha(IRepositoryBatalha batalha)
+        public ServiceBatalha(IRepositoryBatalha batalha)
         {
             this.batalha = batalha;
         }
         public bool ExistBatalha(int Id)
         {
-            return batalha.GetBy(h => h.Id == Id).Any();
+            return batalha.Exist(h => h.Id == Id);
         }
 
         public Batalha GetBatalhaById(int Id) =>
-                batalha.FindById(Id);
+                batalha.GetById(Id);
 
 
         //public IQueryable GetAllBatalhas() =>
@@ -43,7 +42,7 @@ namespace EFCore.Api.App
 
         public async Task<bool> DeletarBatalha(Batalha model)
         {
-            batalha.Delete(model);
+            batalha.Remove(model);
             return await batalha.SaveChangesAsync();
         }
     }

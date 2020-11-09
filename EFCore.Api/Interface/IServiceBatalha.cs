@@ -1,10 +1,9 @@
 ﻿using EFCore.Domain;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace EFCore.Api.Interface
 {
-    public interface IAppBatalha
+    public interface IServiceBatalha
     {
         bool ExistBatalha(int Id);
 

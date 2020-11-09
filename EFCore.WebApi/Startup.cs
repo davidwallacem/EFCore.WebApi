@@ -62,7 +62,7 @@ namespace EFCore.WebApi
             services.AddScoped<IRepositoryHeroi, RepositoryHeroi>();
             services.AddScoped<IRepositoryBatalha, RepositoryBatalha>();
             //Interfaces Api
-            services.AddScoped<IAppHeroi, AppHeroi>();
+            services.AddScoped<IServiceHeroi, ServiceHeroi>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

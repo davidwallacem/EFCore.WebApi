@@ -9,27 +9,28 @@ using System.Threading.Tasks;
 
 namespace EFCore.WebApi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class HeroiController : ControllerBase
     {
-        private readonly IAppHeroi _heroi;
-        private readonly ILogger<HeroiController> _logger;
-        public HeroiController(IAppHeroi heroi, ILogger<HeroiController> logger)
+        private readonly IServiceHeroi heroi;
+        private readonly ILogger<HeroiController> logger;
+        public HeroiController(IServiceHeroi heroi, ILogger<HeroiController> logger)
         {
-            _heroi = heroi;
-            _logger = logger;
+            this.heroi = heroi;
+            this.logger = logger;
         }
 
         // GET api/<HeroiController>/5
-        [HttpGet("Get/{id}")]
-        public IActionResult Get(int Id)
+        [HttpGet("Personagem")]
+        public async Task<IActionResult> Personagem(int Id)
         {
             try
             {
-                //var herois = _heroi.GetHeroisById(Id);
-                //return Ok(herois);
-                return Ok();
+                logger.LogInformation("Pesquisando Heroi pelo Id: {Id}", Id);
+                var result = await heroi.CodenomeNomeByIdAsync(Id);
+                logger.LogInformation("O Heroi {nome} foi retornado", result.Nome);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -39,19 +40,19 @@ namespace EFCore.WebApi.Controllers
         }
 
         // GET api/<HeroiController>/GetHeroi
-        [HttpGet("GetHeroi")]
-        public IActionResult GetHeroi()
+        [HttpGet()]
+        public async Task<IActionResult> Listar()
         {
             try
             {
-                _logger.LogInformation("Metodo GetHeroi - Inicio");
-                var herois = _heroi.GetAllHerois();
-                _logger.LogInformation("Metodo GetHeroi - Fim");
+                logger.LogInformation("Listando os Herois");
+                var herois = await heroi.ListHeroiAsync();
+                logger.LogInformation("Herois Listados");
                 return Ok(herois);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                logger.LogError(ex, ex.Message);
                 return BadRequest($"Erro: {ex}");
             }
         }
@@ -65,13 +66,15 @@ namespace EFCore.WebApi.Controllers
         /// <response code="404">Não foi encontrado o ID especificado.</response>
         /// <response code="500">Ocorreu um erro ao cadastrar o Heroi.</response>
         // POST api/<HeroiController>/PostHeroi/5
-        [HttpPost("PostHeroi")]
-        public async Task<IActionResult> PostHeroi(Heroi model)
+        [HttpPost]
+        public async Task<IActionResult> Inserir(Heroi model)
         {
             try
             {
-                if (await _heroi.SalvarHeroi(model))
+                logger.LogInformation("Inserindo um novo Heroi");
+                if (await heroi.SalvarHeroi(model))
                 {
+                    logger.LogInformation("Heroi Inserido");
                     return Ok("BAZINGA!!!");
                 }
             }
@@ -96,15 +99,18 @@ namespace EFCore.WebApi.Controllers
         /// <response code="404">Não foi encontrado o ID especificado.</response>
         /// <response code="500">Ocorreu um erro ao atualizar o Heroi.</response>
         // PUT api/<HeroiController>/PutHeroi/5
-        [HttpPut("PutHeroi/{Id}")]
-        public async Task<IActionResult> PutHeroi(int Id, Heroi model)
+        [HttpPut]
+        public async Task<IActionResult> Atualizar(int Id, Heroi model)
         {
             try
             {
-                if (_heroi.ExistHeroi(Id))
+                logger.LogInformation("Verificando se existe o Heroi");
+                if (await heroi.ExistHeroiById(Id))
                 {
-                    if (await _heroi.AtualizarHeroi(model))
+                    logger.LogInformation("Atualizando o Heroi");
+                    if (await heroi.AtualizarHeroi(model))
                     {
+                        logger.LogInformation("Heroi Atualizado");
                         return Ok("BAZINGA!!!");
                     }
                 }
@@ -121,16 +127,19 @@ namespace EFCore.WebApi.Controllers
         }
 
         // DELETE api/<HeroiController>/5
-        [HttpDelete("Delete/{Id}")]
-        public async Task<IActionResult> Delete(int Id)
+        [HttpDelete]
+        public async Task<IActionResult> Deletar(int Id)
         {
             try
             {
-                var result = _heroi.GetHeroiById(Id);
+                logger.LogInformation("Buscando Heroi do Id:{Id}");
+                var result = await heroi.HeroiByIdAsync(Id);
                 if (result != null)
                 {
-                    if (await _heroi.DeletarHeroi(result))
+                    logger.LogInformation("Deletando o Heroi do Id:{Id}");
+                    if (await heroi.DeletarHeroi(result))
                     {
+                        logger.LogInformation("Heroi Deletado");
                         return Ok("BAZINGA!!!");
                     }
                 }

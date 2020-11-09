@@ -50,6 +50,21 @@ namespace EFCore.Infra.Repositorys
         public IEnumerable<T> GetListBy(Expression<Func<T, bool>> predicate) 
             => Query.Where(predicate);
 
+        public bool Exist(Expression<Func<T, bool>> predicate)
+        {
+            return Query.Where(predicate).Any();
+        }
+
+        public long Count()
+        {
+            return Query.Count();
+        }
+
+        public long CountBy(Expression<Func<T, bool>> predicate)
+        {
+            return Query.Where(predicate).Count();
+        }
+
         public bool SaveChanges() 
             => (context.SaveChanges()) > 0;
 
@@ -72,6 +87,21 @@ namespace EFCore.Infra.Repositorys
 
         public async Task<IEnumerable<T>> GetListByAsync(Expression<Func<T, bool>> predicate)
             => await Query.Where(predicate).AsNoTracking().ToListAsync();
+
+        public async Task<bool> ExistAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await Query.Where(predicate).AsNoTracking().AnyAsync();
+        }
+
+        public async Task<long> CountAsync()
+        {
+            return await Query.AsNoTracking().CountAsync();
+        }
+
+        public async Task<long> CountByAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await Query.Where(predicate).AsNoTracking().CountAsync();
+        }
 
         public async Task<bool> SaveChangesAsync() 
             => (await context.SaveChangesAsync()) > 0;
