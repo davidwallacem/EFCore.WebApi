@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
 namespace EFCore.WebApi
@@ -26,6 +27,26 @@ namespace EFCore.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            //======================================================Swagger==================================================================//
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc(
+                    "v1",
+                    new OpenApiInfo
+                    {
+                        Title = "Empresa Prodesp",
+                        Version = "v1",
+                        Description = "Exemplo de Web usando o Swagger.",
+                        Contact = new OpenApiContact
+                        {
+                            Name = "David Wallace Marques Ferreira",
+                            Email = "dwmferreira@apoioprodesp.sp.gov.br"
+                        }
+                    });
+            });
+            //=========================================================================================================================================//
 
             //===========================================Serialize Newsoft=============================================================================//
             //Instalar os nugets:
@@ -73,7 +94,17 @@ namespace EFCore.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

@@ -1,5 +1,6 @@
 ﻿using EFCore.Api.Interface;
 using EFCore.Domain;
+using EFCore.Domain.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -22,15 +23,25 @@ namespace EFCore.WebApi.Controllers
         }
 
         // GET api/<HeroiController>/5
-        [HttpGet("Personagem")]
+        [HttpGet("Personagem/{Id}")]
+        [ProducesResponseType(typeof(HeroiViewModel), 200)]
+        //[ProducesResponseType(500)]
         public async Task<IActionResult> Personagem(int Id)
         {
             try
             {
                 logger.LogInformation("Pesquisando Heroi pelo Id: {Id}", Id);
                 var result = await heroi.CodenomeNomeByIdAsync(Id);
-                logger.LogInformation("O Heroi {nome} foi retornado", result.Nome);
-                return Ok(result);
+                if (result != null)
+                {
+                    logger.LogInformation("O Heroi {nome} foi retornado", result.Nome);
+                    return Ok(result);
+                }
+                if (true)
+                {
+                    return NotFound("Esse personagem não existe.");
+                }
+                
             }
             catch (Exception ex)
             {
@@ -66,7 +77,7 @@ namespace EFCore.WebApi.Controllers
         /// <response code="404">Não foi encontrado o ID especificado.</response>
         /// <response code="500">Ocorreu um erro ao cadastrar o Heroi.</response>
         // POST api/<HeroiController>/PostHeroi/5
-        [HttpPost]
+        [HttpPost()]
         public async Task<IActionResult> Inserir(Heroi model)
         {
             try
@@ -99,7 +110,7 @@ namespace EFCore.WebApi.Controllers
         /// <response code="404">Não foi encontrado o ID especificado.</response>
         /// <response code="500">Ocorreu um erro ao atualizar o Heroi.</response>
         // PUT api/<HeroiController>/PutHeroi/5
-        [HttpPut]
+        [HttpPut()]
         public async Task<IActionResult> Atualizar(int Id, Heroi model)
         {
             try
@@ -127,7 +138,7 @@ namespace EFCore.WebApi.Controllers
         }
 
         // DELETE api/<HeroiController>/5
-        [HttpDelete]
+        [HttpDelete()]
         public async Task<IActionResult> Deletar(int Id)
         {
             try
