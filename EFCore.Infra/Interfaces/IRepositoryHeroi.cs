@@ -7,8 +7,6 @@ namespace EFCore.Infra.Interfaces
 {
     public interface IRepositoryHeroi : IRepository<Heroi>
     {
-        Task<bool> ExistHeroi(int Id);
-
         Task<IEnumerable<HeroiViewModel>> GetListHeroiAsync();
 
         Task<Heroi> GetHeroiByIdAsync(int Id);

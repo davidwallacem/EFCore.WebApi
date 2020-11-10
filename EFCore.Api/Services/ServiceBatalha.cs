@@ -3,7 +3,7 @@ using EFCore.Domain;
 using EFCore.Infra.Interfaces;
 using System.Threading.Tasks;
 
-namespace EFCore.Api.App
+namespace EFCore.Api.Services
 {
     public class ServiceBatalha : IServiceBatalha
     {

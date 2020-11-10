@@ -7,7 +7,6 @@ namespace EFCore.Api.Interface
 {
     public interface IServiceHeroi
     {
-
         Task<bool> ExistHeroiById(int Id);
 
         Task<IEnumerable<HeroiViewModel>> ListHeroiAsync();

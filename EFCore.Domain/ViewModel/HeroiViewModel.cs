@@ -1,7 +1,4 @@
-﻿using EFCore.Domain.Model;
-using System.Collections.Generic;
-
-namespace EFCore.Domain.ViewModel
+﻿namespace EFCore.Domain.ViewModel
 {
     public class HeroiViewModel
     {

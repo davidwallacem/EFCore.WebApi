@@ -1,10 +1,10 @@
 ﻿using EFCore.Domain;
-using EFCore.Domain.Model;
 using EFCore.Domain.ViewModel;
 using EFCore.Infra.Data.Configuration;
 using EFCore.Infra.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,59 +19,79 @@ namespace EFCore.Infra.Repositorys
             this.logger = logger;
         }
 
-        public async Task<bool> ExistHeroi(int Id)
-        {
-            logger.LogInformation("ExistHeroi Repository - Início");
-            var exist = await ExistAsync(h => h.Id == Id);
-            logger.LogInformation("ExistHeroi Repository - Fim");
-            return exist;
-        }
-
         public async Task<IEnumerable<HeroiViewModel>> GetListHeroiAsync()
         {
-            logger.LogInformation("GetListHeroiAsync - Início");
-            var lst = await Query.Include(h => h.IdentidadeSecreta)
-                       .AsNoTracking().OrderBy(h => h.Id)
-                       .Select(s => new HeroiViewModel
-                       {
-                           Nome = s.Nome,
-                           NomeReal = s.IdentidadeSecreta.NomeReal
+            try
+            {
+                logger.LogInformation("GetListHeroiAsync Repository - Início");
+                var lst = await Query.Include(h => h.IdentidadeSecreta)
+                           .AsNoTracking().OrderBy(h => h.Id)
+                           .Select(s => new HeroiViewModel
+                           {
+                               Nome = s.Nome,
+                               NomeReal = s.IdentidadeSecreta.NomeReal
 
-                       }).ToListAsync();
+                           }).ToListAsync();
 
-            logger.LogInformation("GetListHeroiAsync - Fim");
-            return lst;
+                logger.LogInformation("GetListHeroiAsync Repository - Fim");
+                return lst;
+            }
+            catch (Exception ex)
+            {
+
+                logger.LogError("GetListHeroiAsync Repository: {erro}" + ex, ex.InnerException.Message);
+                throw new Exception($"GetListHeroiAsync Repository: {ex.InnerException.Message}");
+            }
         }
 
         public async Task<Heroi> GetHeroiByIdAsync(int Id)
         {
-            logger.LogInformation("GetHeroiByIdAsync Repository - Início");
+            try
+            {
+                logger.LogInformation("GetHeroiByIdAsync Repository - Início");
 
-            var lst = await Query.Include(h => h.IdentidadeSecreta)
-                      .Where(h => h.Id == Id)
-                      .AsNoTracking()
-                      .FirstOrDefaultAsync();
+                var lst = await Query.Include(h => h.IdentidadeSecreta)
+                          .Where(h => h.Id == Id)
+                          .AsNoTracking()
+                          .FirstOrDefaultAsync();
 
-            logger.LogInformation("GetHeroiByIdAsync Repository - Fim");
-            return lst;
+                logger.LogInformation("GetHeroiByIdAsync Repository - Fim");
+                return lst;
+            }
+            catch (Exception ex)
+            {
+
+                logger.LogError("GetHeroiByIdAsync Repository: {erro}" + ex, ex.InnerException.Message);
+                throw new Exception($"GetHeroiByIdAsync Repository: {ex.InnerException.Message}");
+            }
         }
 
         public async Task<HeroiViewModel> GetCodenomeNomeByIdAsync(int Id)
         {
-            logger.LogInformation("GetCodenomeNomeByIdAsync Repository - Início");
+            try
+            {
+                logger.LogInformation("GetCodenomeNomeByIdAsync Repository - Início");
 
-            var lst = await Query.Include(h => h.IdentidadeSecreta)
-                      .Where(h => h.Id == Id)
-                      .AsNoTracking()
-                      .Select(s => new HeroiViewModel
-                      {
-                          Nome = s.Nome,
-                          NomeReal = s.IdentidadeSecreta.NomeReal
+                var lst = await Query.Include(h => h.IdentidadeSecreta)
+                          .Where(h => h.Id == Id)
+                          .AsNoTracking()
+                          .Select(s => new HeroiViewModel
+                          {
+                              Nome = s.Nome,
+                              NomeReal = s.IdentidadeSecreta.NomeReal
 
-                      }).FirstOrDefaultAsync();
+                          }).FirstOrDefaultAsync();
 
-            logger.LogInformation("GetCodenomeNomeByIdAsync Repository - Fim");
-            return lst;
+                logger.LogInformation("GetCodenomeNomeByIdAsync Repository - Fim");
+                return lst;
+            }
+            catch (Exception ex)
+            {
+
+                logger.LogError("GetCodenomeNomeByIdAsync Repository: {erro}" + ex, ex.InnerException.Message);
+                throw new Exception($"GetCodenomeNomeByIdAsync Repository: {ex.InnerException.Message}");
+            }
+
         }
     }
 }
