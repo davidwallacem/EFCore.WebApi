@@ -1,9 +1,9 @@
-﻿namespace EFCore.WebApi.Models
+﻿namespace EFCore.Domain
 {
-    public class Arma
+    public class IdentidadeSecreta
     {
         public int Id { get; set; }
-        public string Nome { get; set; }
+        public string NomeReal { get; set; }
         public int HeroiId { get; set; }
         public Heroi Heroi { get; set; }
     }

@@ -5,22 +5,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20201008011805_HeroiBatalha_IdentidadeSecreta.cs" />
-    <Compile Remove="Migrations\20201008011805_HeroiBatalha_IdentidadeSecreta.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.8">
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.8" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
+    <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.6.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <PackageReference Include="Utf8Json" Version="1.3.7" />
+    <PackageReference Include="Utf8Json.AspNetCoreMvcFormatter" Version="1.3.7" />
+    <PackageReference Include="Utf8Json.ImmutableCollection" Version="1.3.7" />
+    <PackageReference Include="Utf8Json.UnityShims" Version="1.3.7" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Configuration\" />
+    <ProjectReference Include="..\EFCore.Api\EFCore.Api.csproj" />
   </ItemGroup>
   
 </Project>
