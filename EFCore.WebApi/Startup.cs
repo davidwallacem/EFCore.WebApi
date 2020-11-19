@@ -36,13 +36,13 @@ namespace EFCore.WebApi
                     "v1",
                     new OpenApiInfo
                     {
-                        Title = "Empresa Prodesp",
+                        Title = "Minha Empresa",
                         Version = "v1",
                         Description = "Exemplo de Web usando o Swagger.",
                         Contact = new OpenApiContact
                         {
                             Name = "David Wallace Marques Ferreira",
-                            Email = "dwmferreira@apoioprodesp.sp.gov.br"
+                            Email = "davidwallacem@hotmail.com"
                         }
                     });
             });
